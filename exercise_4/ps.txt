@@ -1,0 +1,5 @@
+Based on the principle of granting only the minimum permissions needed to complete the task, it is recommended to provide only the "s3:GetObject" permissions for the task. 
+This means that the user will only have read access to the necessary resources and will not be able to make any changes or manipulate.
+However, if additional permissions are required to complete the task, careful consideration needs to be given and documented as to what permissions are needed and why. 
+This will help ensure that permissions are granted only when necessary and maintain the overall security of the system. 
+"iam_policy_all_permissions.json" provides all permissions, but I don't think that's secure enough.

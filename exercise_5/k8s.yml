@@ -6,15 +6,19 @@ metadata:
     app: myapp
 spec:
   initContainers:
-    - name: init-script-downloader
-      image: appropriate/curl
-      args:
-        - '-o'
-        - '/data/myfile.txt'
-        - 'https://raw.githubusercontent.com/BGLCorp/devops-interview-tests/85f6c340cda8e858f563302c8f812ae84bf672da/myfile.txt'
+    - name: git-cloner
+      image: alpine/git
+      command:
+        - git
+        - clone
+        - --single-branch
+        - --branch=main
+        - https://raw.githubusercontent.com/BGLCorp/devops-interview-tests/85f6c340cda8e858f563302c8f812ae84bf672da/myfile.txt.git
+        - /data
       volumeMounts:
         - name: temp # mount the volume where downloaded file will be saved
           mountPath: /data
+
   containers:
     - name: myapp-container
       image: alpine:latest
