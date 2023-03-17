@@ -5,29 +5,23 @@ metadata:
   labels:
     app: myapp
 spec:
-  containers:
-  - name: myapp-container
-    image: alpine:latest
-    command: ['sh', '-c', 'cat /data/myfile.txt']
-    volumeMounts:
-    - mountPath: /data
-      name: temp
-  volumes:
-  - emptyDir: {}
-    name: temp
-
   initContainers:
-  - name: git-cloner
-    image: alpine/git
-    args:
-        - clone
-        - --single-branch
-        - --
-        - https://github.com/BGLCorp/devops-interview-tests/blob/85f6c340cda8e858f563302c8f812ae84bf672da/myfile.txt
-        - /data
-    volumeMounts:
-    - mountPath: /data
-      name: temp
+    - name: init-script-downloader
+      image: appropriate/curl
+      args:
+        - '-o'
+        - '/data/myfile.txt'
+        - 'https://raw.githubusercontent.com/BGLCorp/devops-interview-tests/85f6c340cda8e858f563302c8f812ae84bf672da/myfile.txt'
+      volumeMounts:
+        - name: temp # mount the volume where downloaded file will be saved
+          mountPath: /data
+  containers:
+    - name: myapp-container
+      image: alpine:latest
+      command: ['sh', '-c', 'cat /data/myfile.txt']
+      volumeMounts:
+        - mountPath: /data
+          name: temp
   volumes:
-  - emptyDir: {}
-    name: temp
+    - emptyDir: {}
+      name: temp
